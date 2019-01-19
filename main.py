@@ -10,4 +10,6 @@ if __name__ == "__main__":
 
     train_iter, val_iter = get_my_data(64)
 
+    trainer = MuseGANTrainer(device)
 
+    trainer.train(train_iter, val_iter, 30)
