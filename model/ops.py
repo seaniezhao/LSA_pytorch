@@ -6,8 +6,8 @@ def concat_prev(bar_data, condition):
     if condition is None:
         return bar_data
     else:
-        if bar_data.shape[1:3] == condition.shape[1:3]:
+        if bar_data.shape[2:4] == condition.shape[2:4]:
 
-            return torch.cat((bar_data, condition), 3)
+            return torch.cat((bar_data, condition), 1)
         else:
             raise ValueError('unmatched shape:', bar_data.shape, 'and', condition.shape)

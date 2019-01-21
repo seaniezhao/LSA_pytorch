@@ -10,6 +10,7 @@ if __name__ == "__main__":
 
     train_iter, val_iter = get_my_data(64)
 
-    trainer = MuseGANTrainer(device)
+    # device, z_intra_dim, z_inter_dim, track_dim, lmbda,
+    trainer = MuseGANTrainer(device, 64, 64, 5, 10)
 
-    trainer.train(train_iter, val_iter, 30)
+    trainer.train(train_iter, 30)
