@@ -94,7 +94,6 @@ class BarGenerator(nn.Module):
 
         self.layer7 = nn.Sequential(
             nn.ConvTranspose2d(65, 1, (1, 7), stride=(1, 7), padding=0),
-            nn.Tanh(),
         )
 
     def forward(self, z, barCondi):
@@ -121,7 +120,7 @@ class BarGenerator(nn.Module):
         h7 = concat_prev(h6, barCondi[0])  # (?, 65, 48, 12)
         h7 = self.layer7(h7)  # (?, 1, 48, 84)
 
-        return h7
+        return torch.tanh(h7)
 
 
 
@@ -156,11 +155,12 @@ class BarDiscriminator(nn.Module):
             nn.LeakyReLU(True)
         )
 
-        self.linear0 = nn.Linear(6336, 1024)
+        self.linear0 = nn.Sequential(
+            nn.Linear(6336, 1024),
+            nn.LeakyReLU(True)
+        )
 
-        nn.LeakyReLU(True)
-
-        self.linear1 = nn.Linear(1024,1)
+        self.linear1 = nn.Linear(1024, 1)
 
     def forward(self, barData, barCondi):
         # barData shape (?, 5, 48, 84)

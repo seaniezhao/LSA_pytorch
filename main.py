@@ -14,3 +14,4 @@ if __name__ == "__main__":
     trainer = MuseGANTrainer(device, 64, 64, 5, 10)
 
     trainer.train(train_iter, 30)
+
