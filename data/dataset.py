@@ -26,15 +26,22 @@ class LSADataset(torch.utils.data.Dataset):
 
 
 
-def get_my_data(BATCH_SIZE=32):
+def get_my_data(BATCH_SIZE=64, trainer_type=0):
     """ Load music data """
 
+    t_path = '/home/sean/pythonProj/LSArrangement/LSA_pytorch/data/chord_sequence/tra'
+    v_path = '/home/sean/pythonProj/LSArrangement/LSA_pytorch/data/chord_sequence/val'
+
+    if trainer_type == 1:  # chroma sequence
+        t_path = '/home/sean/pythonProj/LSArrangement/LSA_pytorch/data/chroma_sequence/tra'
+        v_path = '/home/sean/pythonProj/LSArrangement/LSA_pytorch/data/chroma_sequence/val'
+
     train_iter = torch.utils.data.DataLoader(
-        LSADataset('/home/sean/pythonProj/LSArrangement/LSA_pytorch/data/chroma_sequence/tra'),
+        LSADataset(t_path),
         batch_size=BATCH_SIZE, shuffle=True,num_workers=10)
 
     val_iter = torch.utils.data.DataLoader(
-        LSADataset('/home/sean/pythonProj/LSArrangement/LSA_pytorch/data/chroma_sequence/val'),
+        LSADataset(v_path),
         batch_size=BATCH_SIZE, shuffle=False, num_workers=10)
 
 

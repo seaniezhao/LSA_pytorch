@@ -1,19 +1,18 @@
 import torch
-from model.modules import *
-from model.MuseGAN import MuseGAN
+from model.MuseGAN import MuseGAN, Discrimitor
 import torch.autograd as autograd
 from model.libs.utils import *
 import time
 import copy
 
 class MuseGANTrainer:
-    def __init__(self, device, z_inter_dim, z_intra_dim, track_dim, lmbda, print_batch = True):
+    def __init__(self, trainer_type, device, z_inter_dim, z_intra_dim, track_dim, lmbda, print_batch=True):
         """ Object to hold data iterators, train the model """
 
         self.__dict__.update(locals())
 
-        self.museGan = MuseGAN(track_dim, z_inter_dim, z_intra_dim).to(device)
-        self.discriminator = BarDiscriminator().to(device)
+        self.museGan = MuseGAN(trainer_type, track_dim, z_inter_dim, z_intra_dim).to(device)
+        self.discriminator = Discrimitor(trainer_type).to(device)
 
         g_parameters_n = self.count_parameters(self.museGan)
         d_parameters_n = self.count_parameters(self.discriminator)
@@ -109,7 +108,7 @@ class MuseGANTrainer:
         for param in self.discriminator.parameters():
             param.requires_grad = True
 
-        #self.museGan.train()
+        self.museGan.train()
 
         images, conditions = batch
         batch_size = images.shape[0]
@@ -132,10 +131,10 @@ class MuseGANTrainer:
 
     def train_G(self, batch):
         # to avoid extra computation
-        #for param in self.discriminator.parameters():
-            #param.requires_grad = False
+        for param in self.discriminator.parameters():
+            param.requires_grad = False
 
-        #self.museGan.train()
+        self.museGan.train()
 
         images, conditions = batch
         batch_size = images.shape[0]
@@ -151,7 +150,7 @@ class MuseGANTrainer:
         return g_loss
 
     def run_sampler(self, batch, prefix='sample'):
-        #self.museGan.eval()
+        self.museGan.eval()
         images, conditions = batch
         batch_size = images.shape[0]
         z_tuple = self.generate_inter_intra(batch_size)
@@ -174,6 +173,8 @@ class MuseGANTrainer:
         sample_shape = get_sample_shape(batch_size)
         save_bars(G_output, size=sample_shape, file_path=gen_dir, name=prefix, type_=0)
         save_bars(G_output_binary, size=sample_shape, file_path=gen_dir, name=prefix + '_binary', type_=0)
+        save_bars(images, size=sample_shape, file_path=gen_dir, name=prefix + '_origin', type_=0)
+
 
 
     def save_model(self,path):
