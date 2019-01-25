@@ -57,7 +57,7 @@ class MuseGANTrainer:
                     optimizerD.step()
                     # Clip weights of discriminator
                     # for p in self.discriminator.parameters():
-                    #     p.data.clamp_(-0.01, 0.01)
+                    #     p.data.clamp_(-1, 1)
 
                 optimizerG.zero_grad()
                 g_loss = self.train_G(batch)

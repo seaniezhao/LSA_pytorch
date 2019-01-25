@@ -11,27 +11,27 @@ class BarEncoder_ChromaSeq(nn.Module):
         self.layer0 = nn.Sequential(
             nn.Conv2d(1, 16, (3, 1), stride=(3, 1)),
             nn.BatchNorm2d(16),
-            nn.LeakyReLU(True)
+            nn.LeakyReLU(0.2, True)
         )
         self.layer1 = nn.Sequential(
             nn.Conv2d(16, 16, (2, 1), stride=(2, 1)),
             nn.BatchNorm2d(16),
-            nn.LeakyReLU(True),
+            nn.LeakyReLU(0.2, True)
         )
         self.layer2 = nn.Sequential(
             nn.Conv2d(16, 16, (2, 1), stride=(2, 1)),
             nn.BatchNorm2d(16),
-            nn.LeakyReLU(True),
+            nn.LeakyReLU(0.2, True)
         )
         self.layer3 = nn.Sequential(
             nn.Conv2d(16, 16, (2, 1), stride=(2, 1)),
             nn.BatchNorm2d(16),
-            nn.LeakyReLU(True),
+            nn.LeakyReLU(0.2, True)
         )
         self.layer4 = nn.Sequential(
             nn.Conv2d(16, 16, (2, 1), stride=(2, 1)),
             nn.BatchNorm2d(16),
-            nn.LeakyReLU(True),
+            nn.LeakyReLU(0.2, True)
         )
     def forward(self, condition):
         # condition shape: (?, 1, 48, 12)
@@ -53,32 +53,32 @@ class BarEncoder_ChordSeq(nn.Module):
         self.layer0 = nn.Sequential(
             nn.Conv2d(1, 16, (1, 12), stride=(1, 12)),
             nn.BatchNorm2d(16),
-            nn.LeakyReLU(True)
+            nn.LeakyReLU(0.2, True)
         )
         self.layer1 = nn.Sequential(
             nn.Conv2d(16, 16, (1, 7), stride=(1, 7)),
             nn.BatchNorm2d(16),
-            nn.LeakyReLU(True),
+            nn.LeakyReLU(0.2, True)
         )
         self.layer2 = nn.Sequential(
             nn.Conv2d(16, 16, (3, 1), stride=(3, 1)),
             nn.BatchNorm2d(16),
-            nn.LeakyReLU(True),
+            nn.LeakyReLU(0.2, True)
         )
         self.layer3 = nn.Sequential(
             nn.Conv2d(16, 16, (2, 1), stride=(2, 1)),
             nn.BatchNorm2d(16),
-            nn.LeakyReLU(True),
+            nn.LeakyReLU(0.2, True)
         )
         self.layer4 = nn.Sequential(
             nn.Conv2d(16, 16, (2, 1), stride=(2, 1)),
             nn.BatchNorm2d(16),
-            nn.LeakyReLU(True),
+            nn.LeakyReLU(0.2, True)
         )
         self.layer5 = nn.Sequential(
             nn.Conv2d(16, 16, (2, 1), stride=(2, 1)),
             nn.BatchNorm2d(16),
-            nn.LeakyReLU(True),
+            nn.LeakyReLU(0.2, True)
         )
 
     def forward(self, condition):
@@ -248,33 +248,33 @@ class BarDiscriminator_ChromaSeq(nn.Module):
 
         self.layer0 = nn.Sequential(
             nn.Conv2d(5, 128, (1, 7), stride=(1, 7)),
-            nn.LeakyReLU(True)
+            nn.LeakyReLU(0.2, True)
         )
         self.layer1 = nn.Sequential(
             nn.Conv2d(129, 128, (3, 1), stride=(3, 1)),
-            nn.LeakyReLU(True)
+            nn.LeakyReLU(0.2, True)
         )
         self.layer2 = nn.Sequential(
             nn.Conv2d(144, 128, (2, 1), stride=(2, 1)),
-            nn.LeakyReLU(True)
+            nn.LeakyReLU(0.2, True)
         )
         self.layer3 = nn.Sequential(
             nn.Conv2d(144, 128, (2, 1), stride=(2, 1)),
-            nn.LeakyReLU(True)
+            nn.LeakyReLU(0.2, True)
         )
 
         self.layer4 = nn.Sequential(
             nn.Conv2d(144, 256, (2, 1), stride=(2, 1)),
-            nn.LeakyReLU(True)
+            nn.LeakyReLU(0.2, True)
         )
         self.layer5 = nn.Sequential(
             nn.Conv2d(272, 512, (2, 1), stride=(2, 1)),
-            nn.LeakyReLU(True)
+            nn.LeakyReLU(0.2, True)
         )
 
         self.linear0 = nn.Sequential(
             nn.Linear(6336, 1024),
-            nn.LeakyReLU(True)
+            nn.LeakyReLU(0.2, True)
         )
 
         self.linear1 = nn.Linear(1024, 1)
@@ -313,17 +313,17 @@ class BarDiscriminator_ChordSeq(nn.Module):
 
         self.conv = nn.Sequential(
             nn.Conv2d(6, 128, (1, 12), stride=(1, 12)),  # (?, 128, 48, 7)
-            nn.LeakyReLU(True),
+            nn.LeakyReLU(0.2, True),
             nn.Conv2d(128, 128, (1, 7), stride=(1, 7)),  # (?, 128, 48, 1)
-            nn.LeakyReLU(True),
+            nn.LeakyReLU(0.2, True),
             nn.Conv2d(128, 128, (2, 1), stride=(2, 1)),  # (?, 128, 24, 1)
-            nn.LeakyReLU(True),
+            nn.LeakyReLU(0.2, True),
             nn.Conv2d(128, 128, (2, 1), stride=(2, 1)),  # (?, 128, 12, 1)
-            nn.LeakyReLU(True),
+            nn.LeakyReLU(0.2, True),
             nn.Conv2d(128, 256, (4, 1), stride=(2, 1)),  # (?, 256, 5, 1)
-            nn.LeakyReLU(True),
+            nn.LeakyReLU(0.2, True),
             nn.Conv2d(256, 512, (3, 1), stride=(2, 1)),  # (?, 512, 2, 1)
-            nn.LeakyReLU(True),
+            nn.LeakyReLU(0.2, True),
         )
 
         self.linear0 = nn.Sequential(
