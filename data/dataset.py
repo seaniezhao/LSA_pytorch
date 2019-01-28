@@ -44,8 +44,14 @@ def get_my_data(BATCH_SIZE=64, trainer_type=0):
         LSADataset(v_path),
         batch_size=BATCH_SIZE, shuffle=False, num_workers=10)
 
-
     return train_iter, val_iter
+
+def get_song_condition(path):
+
+    data_y = np.load(path)
+    data_y = np.transpose(data_y, [0, 3, 1, 2])
+
+    return data_y.astype(np.float32)*2 - 1
 
 
 if __name__ == '__main__':

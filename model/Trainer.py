@@ -76,7 +76,7 @@ class MuseGANTrainer:
                     self.run_sampler(batch, str(counter))
 
                 counter += 1
-            self.save_model('checkpoint.ckpt')
+            self.save_model('type%d_checkpoint_%d.ckpt' % (self.trainer_type, epoch))
 
         print('{:=^120}'.format(' Training End '))
 
@@ -175,12 +175,28 @@ class MuseGANTrainer:
         save_bars(G_output_binary, size=sample_shape, file_path=gen_dir, name=prefix + '_binary', type_=0)
         save_bars(images, size=sample_shape, file_path=gen_dir, name=prefix + '_origin', type_=0)
 
+    def eval_sampler(self, conditions, name="gen_song"):
 
+        song_len = len(conditions)
+        z_tuple = self.generate_inter_intra(song_len)
 
-    def save_model(self,path):
+        outputs, _ = self.museGan(z_tuple, conditions)
+
+        outputs = outputs.detach().permute(0, 2, 3, 1).cpu()
+        outputs[outputs > 0] = 1
+        outputs[outputs <= 0] = -1
+
+        gen_dir = 'gen'
+        if not os.path.exists(gen_dir):
+            os.makedirs(gen_dir)
+
+        save_midis(outputs, file_path=os.path.join(gen_dir, name + '.mid'))
+
+    def save_model(self, path):
+        path = 'checkpoints/'+path
         torch.save(self.museGan.state_dict(), path)
 
-    def load_model(self):
-        pass
-
+    def load_model(self, path):
+        self.museGan.load_state_dict(torch.load(path))
+        self.museGan.eval()
 
