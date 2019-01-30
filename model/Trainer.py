@@ -198,7 +198,7 @@ class MuseGANTrainer:
     def eval_sampler(self, conditions, name="gen_song"):
 
         song_len = len(conditions)
-        z_tuple = self.generate_inter_intra_control(song_len)
+        z_tuple = self.generate_inter_intra(song_len)
 
         outputs, _ = self.museGan(z_tuple, conditions)
 
