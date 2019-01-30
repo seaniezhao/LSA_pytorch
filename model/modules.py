@@ -328,7 +328,7 @@ class BarDiscriminator_ChordSeq(nn.Module):
 
         self.linear0 = nn.Sequential(
             nn.Linear(1024, 1024),
-            nn.LeakyReLU(True)
+            nn.LeakyReLU(0.2, True)
         )
 
         self.linear1 = nn.Linear(1024, 1)

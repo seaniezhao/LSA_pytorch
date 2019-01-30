@@ -11,7 +11,7 @@ if __name__ == "__main__":
     # device, z_intra_dim, z_inter_dim, track_dim, lmbda,
     trainer = MuseGANTrainer(trainer_type, device, 64, 64, 5, 10)
 
-    trainer.load_model('checkpoints/type0_checkpoint_29.ckpt')
+    trainer.load_model('checkpoints/type0_checkpoint_25.ckpt')
 
     conditions = get_song_condition('slam_dunk_y.npy')
     conditions = torch.Tensor(conditions).to(device)

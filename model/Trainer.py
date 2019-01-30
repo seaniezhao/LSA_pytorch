@@ -29,6 +29,26 @@ class MuseGANTrainer:
 
         return z_inter, z_intra
 
+    def generate_inter_intra_control(self, batch_size):
+
+        control_arr = [15, 40, 43, 10, 19, 9]
+        z_inter_arr = []
+        z_intra_arr = []
+        for item in control_arr:
+            z_inter = torch.normal(torch.zeros(1, self.z_inter_dim), 0.1).to(self.device)
+            z_intra = torch.normal(torch.zeros(1, self.z_intra_dim, self.track_dim), 0.1).to(self.device)
+
+            z_inter = z_inter.repeat((item, 1))
+            z_intra = z_intra.repeat((item, 1, 1))
+
+            z_inter_arr.append(z_inter)
+            z_intra_arr.append(z_intra)
+
+        z_inter = torch.cat(z_inter_arr)
+        z_intra = torch.cat(z_intra_arr)
+
+        return z_inter, z_intra
+
 
     def train(self, train_iter, num_epochs, model_path='', lr = 2e-4):
 
@@ -178,19 +198,26 @@ class MuseGANTrainer:
     def eval_sampler(self, conditions, name="gen_song"):
 
         song_len = len(conditions)
-        z_tuple = self.generate_inter_intra(song_len)
+        z_tuple = self.generate_inter_intra_control(song_len)
 
         outputs, _ = self.museGan(z_tuple, conditions)
 
-        outputs = outputs.detach().permute(0, 2, 3, 1).cpu()
+        outputs = outputs.detach().permute(0, 2, 3, 1).cpu().numpy()
         outputs[outputs > 0] = 1
         outputs[outputs <= 0] = -1
 
-        gen_dir = 'gen'
+        gen_dir = 'gen/type0'
+        if self.trainer_type == 1:
+            gen_dir = 'gen/type1'
+
         if not os.path.exists(gen_dir):
             os.makedirs(gen_dir)
 
+
         save_midis(outputs, file_path=os.path.join(gen_dir, name + '.mid'))
+
+        outputs = ((outputs + 1).astype(np.float) / 2.0).astype(np.bool)
+        np.save(os.path.join(gen_dir, name + '.npy'), outputs)
 
     def save_model(self, path):
         path = 'checkpoints/'+path

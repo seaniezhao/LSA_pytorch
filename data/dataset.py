@@ -15,6 +15,8 @@ class LSADataset(torch.utils.data.Dataset):
         # (?, 48, 12, 1) --> (?, 1, 48, 12)
         self.data_y = np.transpose(self.data_y, [0, 3, 1, 2])
 
+        pass
+
     def __getitem__(self, index):
 
 
@@ -49,6 +51,7 @@ def get_my_data(BATCH_SIZE=64, trainer_type=0):
 def get_song_condition(path):
 
     data_y = np.load(path)
+    #data_y = np.expand_dims(data_y, axis=3)
     data_y = np.transpose(data_y, [0, 3, 1, 2])
 
     return data_y.astype(np.float32)*2 - 1

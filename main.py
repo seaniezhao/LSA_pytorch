@@ -9,7 +9,7 @@ if __name__ == "__main__":
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     # 0: chord sequence, 1: chroma sequence
-    trainer_type = 1
+    trainer_type = 0
 
     train_iter, val_iter = get_my_data(64, trainer_type)
 
